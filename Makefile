@@ -15,7 +15,7 @@ kernel.elf:loader.o $(C_OBJ)
 	i386-elf-gcc -ffreestanding -c $< -o $@
 
 clean:
-	rm *.o iso/boot/kernel.elf os.iso bochslog.txt kernel/*.o drivers/*.o
+	rm *.o iso/boot/kernel.elf bochslog.txt kernel/*.o drivers/*.o
 	
 bochs:
 	bochs -f bochsrc.txt -q
