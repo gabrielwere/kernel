@@ -1,12 +1,15 @@
 #include "../drivers/screen.h"
+#include "../x86/interrupt_handler.h"
 
 void main(){
 
-	int i;
-	for(i = 0;i < 25;i++)
-		print("high address\n");
 
-	print("low address\n");
-	print("gabriel were fkjdfldkgldkflsndklsnjf");
-	print("gabriel were fkjdfldkgldkflsndklsnjf");
+//	print("booting the OS");
+
+	set_idt();
+
+	__asm__("int $0x3");
+	__asm__("int $0x10");
+	__asm__("int $0x7");
+
 }

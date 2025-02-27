@@ -23,7 +23,7 @@ gdt_end:
 
 
 gdt_descriptor:
-dw gdt_end - gdt_start
+dw gdt_end - gdt_start - 1
 dd gdt_start
 
 KERNEL_CODE_SEGMENT equ kernel_code_seg - gdt_start

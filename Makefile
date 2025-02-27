@@ -1,5 +1,5 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
-C_OBJ = $(C_SOURCES:.c=.o)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c x86/*.c)
+C_OBJ = $(C_SOURCES:.c=.o x86/interrupts.o)
 
 all:kernel.elf
 	mv kernel.elf iso/boot/
@@ -15,10 +15,13 @@ kernel.elf:loader.o $(C_OBJ)
 	i386-elf-gcc -ffreestanding -c $< -o $@
 
 clean:
-	rm *.o iso/boot/kernel.elf bochslog.txt kernel/*.o drivers/*.o
+	rm *.o iso/boot/kernel.elf bochslog.txt kernel/*.o drivers/*.o x86/*.o
 	
 bochs:
 	bochs -f bochsrc.txt -q
+
+qemu:
+	qemu-system-i386 -boot d -cdrom os.iso -m 256
 
 log:
 	cat bochslog.txt
