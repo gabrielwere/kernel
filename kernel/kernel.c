@@ -1,4 +1,5 @@
 #include "../drivers/screen.h"
+#include "../drivers/keyboard.h"
 #include "../x86/interrupt_handler.h"
 
 void main(){
@@ -8,8 +9,9 @@ void main(){
 
 	set_idt();
 
-	__asm__("int $0x3");
-	__asm__("int $0x10");
-	__asm__("int $0x7");
+	//enable interrupts
+	__asm__("sti");
+
+	init_keyboard();
 
 }
