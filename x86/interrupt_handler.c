@@ -116,7 +116,6 @@ void interrupt_handler(stack_state_t stack_state){
 
 }
 
-
 void irq_handler(stack_state_t stack_state){
 
 	//send a message to the PIC that the interrupt has been handled

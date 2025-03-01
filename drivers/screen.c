@@ -34,12 +34,18 @@ unsigned int cursor_offset(unsigned int row,unsigned int column){
 
 }
 
-unsigned int get_row(unsigned int offset,unsigned int col){
+unsigned int get_row(unsigned int offset){ 
 
-	offset /= 2;
-	return (offset - col) / MAX_COLS;
+	return offset / (2 * MAX_COLS); 
+
 }
 
+unsigned int get_col(unsigned int offset){ 
+
+	return (offset - (get_row(offset)*2*MAX_COLS))/2;
+
+}
+		
 void frame_buffer_copy(unsigned char *to,unsigned char *from,int no_of_bytes){
 
 	while(no_of_bytes--)
@@ -91,12 +97,26 @@ unsigned int print_char(unsigned char character){
 
 	cursor = get_cursor_position();
 
+	unsigned int col = get_col(cursor);
+	unsigned int row = get_row(cursor);
+
 	unsigned char *vga_address = (unsigned char *)VGA_ADDRESS;
   
-	if(character == '\n'){
+	if(character == '\n' || character == '\r'){
 
-		unsigned int row = get_row(cursor,0);
 		cursor = cursor_offset(row + 1,0);
+
+	//backspace
+	}else if(character == '\b'){
+
+		cursor = cursor_offset(row,col - 1);
+
+		vga_address[cursor] = '\0';
+
+	//tab
+	}else if(character == '\t'){
+
+		cursor = cursor_offset(row,col + 4);
 
 	}else{
 

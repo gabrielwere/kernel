@@ -5,7 +5,7 @@ KERNEL_STACK_SIZE equ 4096
 
 %include "gdt.asm"
 
-[extern main]
+[extern kernel_main]
 
 section .bss
 	align 4
@@ -46,7 +46,7 @@ section .text
 		mov gs,ax
 		
 		mov esp,kernel_stack + KERNEL_STACK_SIZE
-		call main
+		call kernel_main
 
 	loop:
 		jmp loop

@@ -2,7 +2,7 @@
 #include "../drivers/keyboard.h"
 #include "../x86/interrupt_handler.h"
 
-void main(){
+void kernel_main(){
 
 
 //	print("booting the OS");
