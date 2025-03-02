@@ -114,6 +114,11 @@ void interrupt_handler(stack_state_t stack_state){
 
 	print(interrupt_messages[stack_state.interrupt_number]);
 
+	if(interrupt_service_routines[stack_state.interrupt_number] != 0){
+		isr_t handler = interrupt_service_routines[stack_state.interrupt_number];
+		handler(stack_state);
+	}
+
 }
 
 void irq_handler(stack_state_t stack_state){

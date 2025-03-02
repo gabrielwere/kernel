@@ -1,7 +1,33 @@
 #include "paging.h"
+#include "../x86/interrupt_handler.h"
+#include "../drivers/screen.h"
 
-page_directory_entry_t page_directory[1024] __attribute__((aligned(4096)));
+page_directory_entry_t page_directory __attribute__((aligned(4096)));
 page_table_entry_t page_table_1[1024] __attribute__((aligned(4096)));
+
+void page_fault_handler(stack_state_t stack_state){
+
+	//the error code
+	if(!(stack_state.error_code & 0x1))
+		print("page is not present\n");
+
+	if(stack_state.error_code & (1 << 1))
+		print("a write operation caused the page fault\n");
+	else
+		print("a read operation caused the page fault\n");
+
+	if(stack_state.error_code & (1 << 2))
+		print("process was running in user mode\n");
+	else
+		print("process was runnnig in kernel mode\n");
+
+	if(stack_state.error_code & (1 << 3))
+		print("reserved bits were being overwritten\n");
+
+	//for now,just stop execution by going into an infinite loop
+	while(1)
+		;
+}
 
 void memset(void *ptr,char character,unsigned int length){
 
@@ -12,6 +38,8 @@ void memset(void *ptr,char character,unsigned int length){
 }
 
 void init_paging(){
+
+	register_isr(&page_fault_handler,14);
 
 	int i;
 
@@ -25,19 +53,21 @@ void init_paging(){
 		page_table_1[i].present = 1;
 	}
 
-	memset(page_directory,'\0',sizeof(page_directory_entry_t) * 1024);
+	memset(&page_directory,'\0',sizeof(page_directory_entry_t));
 
-	page_directory[0].page_table_address = (unsigned int)(&page_table_1) >> 12;
-	page_directory[0].readwrite = 1;
-	page_directory[0].present = 1;
+	page_directory.page_table_address = (unsigned int)(&page_table_1) >> 12;
+	page_directory.readwrite = 1;
+	page_directory.present = 1;
 	
 	__asm__ __volatile__("mov %0,%%cr3" : : "r" (&page_directory));
 	unsigned int cr0;
 	__asm__ __volatile__("mov %%cr0,%0" : "=r" (cr0));
 
 	//0x80000001;
-	cr0 |= (1 << 31) | 1;
+	cr0 |= (1 << 31);
 	__asm__ __volatile__("mov %0,%%cr0" : : "r" (cr0));
 
 
 }
+
+

@@ -6,7 +6,7 @@
 void kernel_main(){
 
 
-	print("booting the OS");
+	print("booting the OS\n");
 
 	set_idt();
 
@@ -17,6 +17,10 @@ void kernel_main(){
 
 
 	init_keyboard();
-	__asm__("int $0x5");
 	print("paging enabled\n");
+
+
+	//generate page fault
+	unsigned int *addr = (unsigned int *)0x800000;
+	unsigned int number = *addr;
 }
