@@ -10,7 +10,7 @@ void kernel_main(){
 
 	set_idt();
 
-	init_paging();
+	//init_paging();
 
 	//enable interrupts
 	__asm__("sti");
@@ -21,6 +21,6 @@ void kernel_main(){
 
 
 	//generate page fault
-	unsigned int *addr = (unsigned int *)0x800000;
-	unsigned int number = *addr;
+	//unsigned int *addr = (unsigned int *)0x800000;
+	//unsigned int number = *addr;
 }
