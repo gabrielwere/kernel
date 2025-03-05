@@ -7,8 +7,8 @@
 #define LOW_BYTE 15
 #define MAX_ROWS 25
 #define MAX_COLS 80
-#define VGA_ADDRESS 0xb8000
 #define WHITE_ON_BLACK 0x0f
+#define VGA_ADDRESS 0xC00B8000
 
 void print(unsigned char *word);
 
